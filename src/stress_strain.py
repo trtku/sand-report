@@ -161,7 +161,7 @@ def ssd_multi(csvfiles, smoothing=1000, show=False, save=False):
         # plt.ylim(0,600)
 
     #0.2%耐力直線
-    plt.scatter(x, y2, s=6, c="yellow") ##0.2%耐力要らない時はここを消す
+    # plt.scatter(x, y2, s=6, c="yellow") ##0.2%耐力要らない時はここを消す
 
     x2 = csvfile['strain_0.2%']
     plt.scatter(x, y, s=6, c="black")
@@ -203,7 +203,7 @@ def ssd_multi(csvfiles, smoothing=1000, show=False, save=False):
         print(path_parent)
 
         path_data = os.path.join(path_parent, 'data')
-        filename = os.path.join(path_data, 'ssd.png')
+        filename = os.path.join(path_data, 'ssd_multi.png')
         plt.savefig(filename)
     else:
         pass
