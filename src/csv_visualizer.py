@@ -3,7 +3,7 @@ import os
 
 
 
-def viz(csvfile, smoothing=1000, show=False, save=False):
+def viz(csvfile, smoothing, prefix, show=False, save=False):
 
     plt.figure(figsize=(10,12), dpi=100)
 
@@ -19,7 +19,7 @@ def viz(csvfile, smoothing=1000, show=False, save=False):
         HERE = os.path.dirname(os.path.abspath(__file__))
         path_parent = os.path.dirname(HERE)
         path_data = os.path.join(path_parent, 'data')
-        filename = os.path.join(path_data, 'std.png')
+        filename = os.path.join(path_data, '{}_std.png'.format(prefix))
         plt.savefig(filename)
     else:
         pass
@@ -36,13 +36,13 @@ def viz_multi(csvfiles, smoothing=1000, show=False, save=False):
     if len(csvfiles)==0:
         print('there is no csv file in this folder')
     elif len(csvfiles) == 1:
-        plt.plot(csvfiles[0].rolling(smoothing).mean().sec, csvfile.rolling(smoothing).mean().N, label='test1', color='green')
+        plt.plot(csvfiles[0].rolling(smoothing).mean().mm, csvfile.rolling(smoothing).mean().N, label='test1', color='green')
     else:
         for i, csvfile in enumerate(csvfiles):
             color_index = "C" + str(i)
-            plt.plot(csvfile.rolling(smoothing).mean().sec, csvfile.rolling(smoothing).mean().N, label='test'+str(i+1), color=color_index)
+            plt.plot(csvfile.rolling(smoothing).mean().mm, csvfile.rolling(smoothing).mean().N, label='test'+str(i+1), color=color_index)
 
-    plt.xlabel('time, sec')
+    plt.xlabel('delta, mm')
     plt.ylabel('compression force, N')
     plt.title('filename', fontdict={'fontsize':15,'fontweight':'bold'})
     plt.suptitle('1 axis compression test')

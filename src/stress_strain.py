@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import math as m
 import os
 
-def ssd(csvfile, smoothing=1000, show=False, save=False):
+def ssd(csvfile, smoothing, prefix, show=False, save=False):
 
     plt.figure(figsize=(10,12), dpi=100)
 
@@ -40,6 +40,8 @@ def ssd(csvfile, smoothing=1000, show=False, save=False):
     a ,b= np.polyfit(x_1, y_1, 1)
     print("傾き　=　",a)
     print("切片　=　",b)
+    p1 = csvfile['N'].max()
+    print("max = ", p1)
 
     #グラフを書く
     #0,1,2 = "sec","N","mm"
@@ -96,7 +98,7 @@ def ssd(csvfile, smoothing=1000, show=False, save=False):
         print(path_parent)
 
         path_data = os.path.join(path_parent, 'data')
-        filename = os.path.join(path_data, 'ssd.png')
+        filename = os.path.join(path_data, '{}_ssd.png'.format(prefix))
         plt.savefig(filename)
     else:
         pass
