@@ -22,9 +22,11 @@
     #define SERIAL Serial
 #endif
 
+int rownumber = 0;
+
 void setup() {
     Wire.begin();
-    Serial.begin(115200);
+    Serial.begin(9600);
     scd30.initialize();
 }
 
@@ -45,19 +47,21 @@ void loop() {
 //        dgr = mapf(result[1], 0, 100, 0, 1);
 //        per = mapf(result[2], 0, 100, 0, 1);
 
+        Serial.print(++rownumber);
+        Serial.print(",");
         
-        Serial.print("CO2_ppm:");
+//        Serial.print("CO2_ppm:");
         Serial.print(ppm);
         Serial.print(",");
 
-        Serial.print("Temprature_℃:");
+//        Serial.print("Temprature_℃:");
         Serial.print(dgr);
         Serial.print(",");
 
-        Serial.print("Humidity_%:");
+//        Serial.print("Humidity_%:");
         Serial.println(per);
         
     }
 
-    delay(2000);
+    delay(10000);
 }

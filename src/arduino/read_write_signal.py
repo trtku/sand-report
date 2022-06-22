@@ -9,7 +9,7 @@ while (i !=24): #24時間分計測＆保存(1時間×24回)
     
     #ファイル名の設定
     now = datetime.datetime.today()     #現在時刻取得       
-    hourstr = "_" + now.strftime("%H")  #時刻を文字列化
+    hourstr = "_" + now.strftime("%H%M%S")  #時刻を文字列化
     filename = "temphumid_" + now.strftime("%Y%m%d") + hourstr + ".csv"
     
     hourstr_ser = hourstr   #hourstr_serの初期化
