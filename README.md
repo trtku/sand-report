@@ -71,5 +71,6 @@ We use `conda` to make sure we have clean, isolated environment for dependencies
 
 ## Credit
 
-This project is part of the Master Thesis at Tokyo University of the Arts by Ko Tsuruta; supervised by Prof.Mitshiro Kanada and Takahiro Kai.
-Developed by Ko Tsuruta(<trtku0809@gmail.com>).
+This project is developed by Ko Tsuruta(<trtku0809@gmail.com>); as a part of his Master Thesis at Tokyo University of the Arts (TUA) supervised by Prof.Mitshiro Kanada and Takahiro Kai.
+
+Special Thanks to the members of Structural Engineering Laboratory at TUA.
