@@ -64,6 +64,11 @@ We use `conda` to make sure we have clean, isolated environment for dependencies
     code .
     ```
 
+1. In case of updating environment
+    ```
+    conda env update -f environment.yml
+    ```
+
 ## Credit
 
 This project is part of the Master Thesis at Tokyo University of the Arts by Ko Tsuruta; supervised by Prof.Mitshiro Kanada and Takahiro Kai.
