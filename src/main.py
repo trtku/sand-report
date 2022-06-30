@@ -1,6 +1,6 @@
 from src import csv_reader as reader
 from src import csv_visualizer as vizualizer
-from visualization import stress_strain as ss
+from visualization import stress_strain_diagram as ss
 
 if __name__=='__main__':
     smooth_factor = 10000
