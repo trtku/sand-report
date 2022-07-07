@@ -23,3 +23,5 @@ dependencies:
     # autocomplete for Rhino
     - Rhino-stubs
     - Grasshopper-stubs
+    # gif maker
+    - gifmaker
