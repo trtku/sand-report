@@ -129,5 +129,5 @@ dmypy.json
 .pyre/
 
 # Rhinoceros related
-.3dmbak
-.3dm_tmp
+*.3dmbak
+*.3dm_tmp
