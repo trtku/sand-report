@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import math as m
 import numpy as np
+from sympy import UniversalSet
 
 class csvManager(object):
     def __init__(self):
@@ -28,6 +29,8 @@ class csvManager(object):
             self.csvfile = pd.read_csv(self.filepath, header=1, skiprows=[i+1 for i in range(18)], usecols=[0,1,2], names=['sec', 'N', 'mm'], encoding="shift-jis")
         elif foldername=='co2_monitoring':
             self.csvfile = pd.read_csv(self.filepath, index_col=0, names=['ind', 'ppm', 'degree', '%'])
+        elif foldername=='stress_exposure':
+            self.csvfile = pd.read_csv(self.filepath, names=['sec', 'N'])
         else:
             raise Exception ("csvfile cannot read from the specified folder")
 
@@ -40,12 +43,13 @@ class csvManager(object):
         self.folderpath = os.path.join(self.path_csv, foldername)
         self.csvfiles = []
 
-        for file in os.listdir(self.folderpath):
+        for i, file in enumerate(os.listdir(self.folderpath)):
             if file.endswith(".csv"):
                 filepath = os.path.join(self.folderpath, file)
 
                 csvfile = pd.read_csv(filepath, header=1, skiprows=[i+1 for i in range(18)], usecols=[0,1,2], names=['sec', 'N', 'mm'], encoding="shift-jis")
                 self.csvfiles.append(csvfile)
+                print(i, filepath)
 
         if slice_csv:
             self.csvfiles = self.csvfiles[start:start+length]
@@ -56,11 +60,12 @@ class csvManager(object):
         plt.figure(figsize=(10,12), dpi=100)
 
         if self.foldername=='compression_test':
-            plt.plot(self.csvfile.rolling(smoothing).mean().sec, self.csvfile.rolling(smoothing).mean().N, label='test1', color='green')
-            plt.xlabel('time, sec')
+            plt.plot(self.csvfile.rolling(smoothing).mean().mm, self.csvfile.rolling(smoothing).mean().N, label='test1', color='green')
+            plt.xlabel('delta, mm')
             plt.ylabel('compression force, N')
             plt.title('filename', fontdict={'fontsize':15,'fontweight':'bold'})
             plt.suptitle('1 axis compression test')
+            plt.legend()
 
         elif self.foldername=='co2_monitoring':
             # self.csvfile['datetime'] = self.csvfile['datetime'].map(lambda x: datetime.strptime(str(x), '%y-%m-%d %H:%M:%S.%f'))
@@ -73,7 +78,18 @@ class csvManager(object):
             # plt.title('filename', fontdict={'fontsize':15,'fontweight':'bold'})
             # plt.suptitle('co2 monitoring')
         
-        plt.legend()
+        elif self.foldername=='stress_exposure':
+            x = self.csvfile['sec'].to_numpy()
+            y = self.csvfile['N'].to_numpy()
+            plt.scatter(x, y, color="red", marker="v")
+
+            # f2 = interp1d(x, y, kind='cubic')
+            # xnew = np.linspace(0, 700000, 700000)
+            plt.plot(x, y)
+            
+        else:
+            print('there is no folder named {}'.format(self.foldername))
+        
 
         if show:
             plt.show()
@@ -143,7 +159,8 @@ class csvManager(object):
             csvfile['stress(MPa)'] = (csvfile.rolling(smoothing).mean().N / A )
 
             #弾性域の範囲
-            new = csvfile[(csvfile['strain'] > 0.015) & (csvfile['strain'] < 0.030)]
+            # new = csvfile[(csvfile['strain'] > 0.015) & (csvfile['strain'] < 0.030)]
+            new = csvfile[(csvfile['strain'] > 0.008) & (csvfile['strain'] < 0.035)]
             # print(new)
 
             #傾きを求める
@@ -152,8 +169,10 @@ class csvManager(object):
             plt.scatter(x_1, y_1, s=6, c="black")
             plt.plot(x_1, np.poly1d(np.polyfit(x_1, y_1, 1))(x_1), label='d=1')
             a ,b= np.polyfit(x_1, y_1, 1)
-            print("傾き　=　",a)
-            print("切片　=　",b)
+            # print("傾き　=　",a)
+            # print("切片　=　",b)
+            p1 = csvfile['N'].max()
+            print("max = ", p1)
 
             #グラフを書く
             #0,1,2 = "sec","N","mm"
@@ -170,8 +189,8 @@ class csvManager(object):
         #0.2%耐力直線
         # plt.scatter(x, y2, s=6, c="yellow") ##0.2%耐力要らない時はここを消す
 
-        x2 = csvfile['strain_0.2%']
-        plt.scatter(x, y, s=6, c="black")
+        # x2 = csvfile['strain_0.2%']
+        # plt.scatter(x, y, s=6, c="black")
 
 
         #交点の座標表示
@@ -185,10 +204,10 @@ class csvManager(object):
             y[i] = round(y[i],3)
         plt.text(x[i], y[i] ,'  ({x}, {y})'.format(x=x[i], y=y[i])) ##0.2%耐力要らない時はここを消す
 
-        print('0.2%耐力',y[max(idx)])
+        # print('0.2%耐力',y[max(idx)])
 
         #引張強さ
-        print('T.S = ' , y.max())
+        # print('T.S = ' , y.max())
 
 
         #グラフの体裁
@@ -225,13 +244,14 @@ if __name__=='__main__':
 
     csv = csvManager()
 
-    # csv.read_csv(foldername='compression_test', filename='20220524_test1.csv')
+    # csv.read_csv(foldername='compression_test', filename='20220628_test1.csv')
     # csv.read_csv(foldername='co2_monitoring', filename='co2_injection.csv')
-    # csv.viz_csv()
+    csv.read_csv(foldername='stress_exposure', filename='stress_exposure.csv')
+    csv.viz_csv()
 
 
-    csv.read_multi_csv(foldername='compression_test', slice_csv=True, start=13, length=4)
-    csv.viz_multi_csv(smoothing=1000, show=True, save=False)
-    csv.ssd_multi(smoothing=1000, show=True, save=False)
+    # csv.read_multi_csv(foldername='compression_test', slice_csv=False, start=21, length=4)
+    # csv.viz_multi_csv(smoothing=1000, show=True, save=False)
+    # csv.ssd_multi(smoothing=1000, show=True, save=False)
 
     
