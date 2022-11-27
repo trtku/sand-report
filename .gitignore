@@ -132,3 +132,4 @@ dmypy.json
 *.3dmbak
 *.3dm_tmp
 *.rhl
+data/gif/shape_grammar/00_default/shape_grammar_00_flat.Redshift_ROP1.gif
