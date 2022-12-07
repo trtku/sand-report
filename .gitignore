@@ -134,3 +134,4 @@ dmypy.json
 *.rhl
 data/gif/shape_grammar/00_default/shape_grammar_00_flat.Redshift_ROP1.gif
 docs/grasshopper/projection.ghx
+docs/grasshopper/projection.ghx
